@@ -11,7 +11,10 @@ const AddButtonModal = ({show, handleClose}) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        addBudget({name: nameRef.current.value, max: parseFloat(maxAmountRef.current.value)})
+        addBudget({
+            name: nameRef.current.value, 
+            max: parseFloat(maxAmountRef.current.value)
+        })
         handleClose();
     }
 

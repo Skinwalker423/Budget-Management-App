@@ -4,7 +4,7 @@ import { currencyFormatter } from "../utils/currencyFormatter";
 import AddButtonModal from './addButtonModal';
 
 
-export default function BudgetCard({name, max, amount, gray}) {
+export default function BudgetCard({name, max, amount, gray, onAddExpenseClick}) {
 
     const className = []
     if(amount > max){
@@ -32,7 +32,7 @@ export default function BudgetCard({name, max, amount, gray}) {
                 </Card.Title> 
                 <ProgressBar variant={getProgressBarVariant(amount, max)} className='my-3 rounded-pill' min={0} max={max} now={(amount)} label={`${(amount/max) * 100}%`} />
                 <Stack direction={'horizontal'} className='d-flex justify-content-end'>
-                    <Button  variant='outline-primary'>Add Expense</Button>
+                    <Button onClick={onAddExpenseClick}  variant='outline-primary'>Add Expense</Button>
                     <Button  variant='outline-secondary'>View Expense</Button>
                 </Stack>
             </Card.Body>
