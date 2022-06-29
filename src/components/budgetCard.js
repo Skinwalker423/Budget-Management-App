@@ -4,7 +4,7 @@ import { currencyFormatter } from "../utils/currencyFormatter";
 import AddButtonModal from './addButtonModal';
 
 
-export default function BudgetCard({name, max, amount, gray, onAddExpenseClick}) {
+export default function BudgetCard({name, max, amount, gray, onAddExpenseClick, hideButtons, onViewExpenseClick}) {
 
     const className = []
     if(amount > max){
@@ -28,13 +28,15 @@ export default function BudgetCard({name, max, amount, gray, onAddExpenseClick})
             <Card.Body className={className}>
                 <Card.Title className='d-flex justify-content-between align-items-baseline fw-normal mb-3'>
                     <div className='me-2'>{name}</div>
-                    <div className='d-flex align-items-baseline'>{currencyFormatter.format(amount)} / <span className='fs-6 text-muted'>{currencyFormatter.format(max)}</span></div>
+                    <div className='d-flex align-items-baseline'>{currencyFormatter.format(amount)} {max && <span className='fs-6 text-muted'>/{currencyFormatter.format(max)}</span>}</div>
                 </Card.Title> 
-                <ProgressBar variant={getProgressBarVariant(amount, max)} className='my-3 rounded-pill' min={0} max={max} now={(amount)} label={`${(amount/max) * 100}%`} />
-                <Stack direction={'horizontal'} className='d-flex justify-content-end'>
+                {max && <ProgressBar variant={getProgressBarVariant(amount, max)} 
+                className='my-3 rounded-pill' min={0} max={max} now={(amount)} label={`${Math.floor((amount/max) * 100)}%`} />}
+
+                {!hideButtons && <Stack direction={'horizontal'} className='d-flex justify-content-end'>
                     <Button onClick={onAddExpenseClick}  variant='outline-primary'>Add Expense</Button>
-                    <Button  variant='outline-secondary'>View Expense</Button>
-                </Stack>
+                    <Button onClick={onViewExpenseClick}  variant='outline-secondary'>View Expense</Button>
+                </Stack>}
             </Card.Body>
         </Card>
     )
