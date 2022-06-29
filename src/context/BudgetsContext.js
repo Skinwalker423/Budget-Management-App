@@ -1,11 +1,9 @@
 import React, { Provider, createContext, useContext, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import useLocalStorage from "../hooks/useLocalStorage";
 
-const defaultValues = {
-    budgets: 0,
-}
 
-const BudgetsContext = React.createContext(defaultValues);
+export const BudgetsContext = React.createContext();
 
 export function useBudgets(){
     return useContext(BudgetsContext);
@@ -13,28 +11,43 @@ export function useBudgets(){
 
 export const BudgetsProvider = ({children}) => {
 
-    const [budgets, setBudgets] = useState([])
-    const [expenses, setExpenses] = useState([])
+    const [budgets, setBudgets] = useLocalStorage('budgets', [])
+    const [expenses, setExpenses] = useLocalStorage('expenses', [])
 
     const getBudgetExpenses = (budgetId) => {
         return expenses.filter((expense) => expense.budgetId === budgetId )
     }
-    const addExpense = ({name, amount, max}) => {
+    const addExpense = ({description, amount, budgetId}) => {
         setExpenses((prevExpense) => {
-            return [...prevExpense, {budgetId: uuidv4(), amount, description}]
+            return [...prevExpense, {id: uuidv4(), amount, description, budgetId}]
          })
     }
     const addBudget = ({name, max}) => {
-        if(prevBudget.find((budget) => budget.name === name )){
-            return prevBudget;
-        }
-        setBudgets(prevBudget => {
-            return [...prevBudget, {id: uuidv4(), name, max } ]
+        setBudgets(prevBudgets => {
+            if(prevBudgets.find((budget) => budget.name === name )){
+                return prevBudgets;
+            }
+            return [...prevBudgets, {id: uuidv4(), name, max } ]
         })
     }
-    const deleteBudget = () => {} 
-    const deleteExpense = () => {}
+    const deleteBudget = ({id}) => {
+        setBudgets((prevBudgets) => {
+            return prevBudgets.filter((budget) => {
+                return budget.id !== id;
+            })
+        })
+    } 
+    const deleteExpense = ({id}) => {
+        //TODO deal with uncategorized expenses
+        setExpenses(prevExpenses => {
+            return prevExpenses.filter((expense) => {
+                return expense.id !== id;
+            })
+        })
+    }
 
     const value = {budgets, expenses, getBudgetExpenses, addExpense, addBudget, deleteBudget, deleteExpense }
-    return <BudgetsContext.Provider value={{value}}>{children}</BudgetsContext.Provider>
+    return (
+        <BudgetsContext.Provider value={value}>{children}</BudgetsContext.Provider>
+    )
 }
