@@ -1,5 +1,6 @@
-import React, { Provider, createContext, useContext, useState } from "react";
+import React, { useContext } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { UNCATEGORIZED_BUDGET_ID } from "../App";
 import useLocalStorage from "../hooks/useLocalStorage";
 
 
@@ -31,6 +32,14 @@ export const BudgetsProvider = ({children}) => {
         })
     }
     const deleteBudget = ({id}) => {
+        setExpenses((prevExpense) => {
+            return prevExpense.map((expense) => {
+                    if(expense.budgetId !== id){
+                        return expense
+                    }
+                    return {...expense, budgetId: UNCATEGORIZED_BUDGET_ID}
+                })
+        })
         setBudgets((prevBudgets) => {
             return prevBudgets.filter((budget) => {
                 return budget.id !== id;

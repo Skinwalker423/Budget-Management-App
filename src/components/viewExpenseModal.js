@@ -1,11 +1,9 @@
-import { Modal, Button, Form, Stack } from "react-bootstrap";
-import { useRef } from "react";
+import { Modal, Button, Stack } from "react-bootstrap";
 import { useBudgets } from "../context/BudgetsContext";
-import { Card } from "react-bootstrap";
 import { currencyFormatter } from "../utils/currencyFormatter";
 import { UNCATEGORIZED_BUDGET_ID } from "../App";
 
-const ViewExpenseModal = ({show, handleClose, budgetId}) => {
+const ViewExpenseModal = ({handleClose, budgetId}) => {
 
     
 
@@ -27,42 +25,47 @@ const ViewExpenseModal = ({show, handleClose, budgetId}) => {
                 <Modal.Title>
                     <Stack direction="horizontal" gap="2">
                         <div>Expenses - {budget.name}</div>
-                        {budgetId !== UNCATEGORIZED_BUDGET_ID && 
-                        <Button 
-                            variant="danger"
-                            onClick={() => deleteBudget(budget)}
-                        >Delete Budget
-                        </Button>}
+                        <Button onClick={() => {
+                            deleteBudget(budget);
+                            console.log(`deleted ${budget.name}`)
+                        }} variant="danger">Delete</Button>
                     </Stack>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 {viewExpenses.map(({amount, description, id}) => {
                     return (
-                    <Card key={id}>
-                        <Card.Body>
-                            <div className="d-flex justify-content-between">
-                                <Card.Title>{description}</Card.Title>
-                                <Card.Text>
-                                    {currencyFormatter.format(amount)}
-                                </Card.Text>
-                            </div>
-                            <div className="d-flex justify-content-end">
-                                <Button variant="danger"  type={'button'} onClick={() => {
-                                    deleteExpense({id});
-                                    console.log('deleted');
-                                }}>Delete Expense</Button>
-                            </div>
-                        </Card.Body>
-                    </Card>
+                    <Stack key={id} direction="horizontal" gap="3" className="mb-3">
+                        <div className="me-auto fs-4" >{description}</div>
+                        <div className="fs-5">{currencyFormatter.format(amount)}</div>
+                        <Button size="sm" variant="outtine-danger" onClick={() => {
+                            deleteExpense({id});
+                            console.log('deleted');
+                        }} className="border">&times;</Button>
+                    </Stack>
                     )
                 })}
             </Modal.Body>
-            <Modal.Footer>
-                <p>footer</p>
-            </Modal.Footer>
         </Modal>
     )
 }
 
 export default ViewExpenseModal;
+
+
+
+
+// {budgetId !== UNCATEGORIZED_BUDGET_ID && 
+//                         <Button 
+//                             variant="danger"
+//                             onClick={() => deleteBudget(budget)}
+//                         >Delete Budget
+//                         </Button>}
+
+
+// <div className="d-flex justify-content-end">
+                                // <Button variant="danger"  type={'button'} onClick={() => {
+                                //     deleteExpense({id});
+                                //     console.log('deleted');
+//                                 }}>Delete Expense</Button>
+//                             </div>

@@ -5,7 +5,7 @@ import { useBudgets } from "../context/BudgetsContext";
 
 const UncategorizedCard = (props) => {
 
-    const {getBudgetExpenses, expenses} = useBudgets();
+    const {getBudgetExpenses} = useBudgets();
 
     const amount = getBudgetExpenses(UNCATEGORIZED_BUDGET_ID).reduce(
           (total, exp) => total + exp.amount, 0);;
