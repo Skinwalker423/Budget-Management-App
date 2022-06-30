@@ -1,7 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Button, Card, ProgressBar, Stack} from "react-bootstrap";
 import { currencyFormatter } from "../utils/currencyFormatter";
-import AddButtonModal from './addButtonModal';
 
 
 export default function BudgetCard({name, max, amount, gray, onAddExpenseClick, hideButtons, onViewExpenseClick}) {
